@@ -34,10 +34,13 @@ func main() {
 
 	homeDir, _ := os.UserHomeDir()
 	configurationFilePath := filepath.Join(homeDir, ".config", "ddnsu", "config.toml")
-	utils.DetermineIfNeedConfigCreationAndCreateIfDoesNotExist(filepath.Join(homeDir, ".config/ddnsu"), "config.toml", ExampleEmbed)
+	utils.DetermineFilesExistenceAndCreateIfDoesNotExist(filepath.Join(homeDir, ".config/ddnsu"), "config.toml", ExampleConfigEmbed)
 	global.ConfigurationPath = configurationFilePath
 	loaded, loadErr := utils.LoadConfigurationIntoGlobalVar(global.ConfigurationPath)
 	utils.StoreActiveTokenInGlobalVar(global.Configuration)
+
+	global.ExampleServiceEmbed = ExampleServiceEmbed
+	global.ExampleShellEmbed = ExampleShellEmbed
 
 	if loadErr != nil || !loaded {
 		fmt.Println(color.RedString("Configuration file could not be loaded. There seems to be syntax issue. The location can be found at %v. The error is: %v", configurationFilePath, loadErr))
@@ -108,6 +111,14 @@ func main() {
 		},
 	}
 	rootCommand.AddCommand(startCommand)
+
+	var installCommand = &cobra.Command{
+		Use:   "install",
+		Short: "Install ddnsu as a systemd service",
+		Args:  cobra.ExactArgs(0),
+		Run:   commands.InstallCommand,
+	}
+	rootCommand.AddCommand(installCommand)
 
 	// config subcommands
 	commands.ConfigCommand.AddCommand(commands.ViewCommand)

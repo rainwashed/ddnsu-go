@@ -41,3 +41,6 @@ var CloudflareZoneId string
 var LastIpAddress string
 
 const RecordManagedPrefix = "[d]-"
+
+var ExampleServiceEmbed []byte
+var ExampleShellEmbed []byte

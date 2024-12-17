@@ -1,0 +1,31 @@
+name: "Build ddnsu with go compile"
+on:
+  push:
+    branches: ["master", "main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ["1.23.2"]
+    if: ${{ !contains(github.event.head_commit.message, 'ignore build') }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Install dependencies
+        run: go get .
+      - name: Build ddnsu binaries
+        run: make
+      - name: Upload binaries as GitHub Release
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "${{github.workspace}}/build/*"
+          draft: true
+          verbose: true

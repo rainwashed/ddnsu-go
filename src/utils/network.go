@@ -117,23 +117,24 @@ const (
 	OS_ALL_RWX = OS_ALL_RW | OS_GROUP_X
 )
 
-func DetermineIfNeedConfigCreationAndCreateIfDoesNotExist(path string, fileName string, embedContent []byte) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
+func DetermineFilesExistenceAndCreateIfDoesNotExist(path string, fileName string, embedContent []byte) bool {
+	if _, err := os.Stat(filepath.Join(path, fileName)); os.IsNotExist(err) {
 		_ = os.MkdirAll(path, os.FileMode(0777))
 		file, err := os.Create(filepath.Join(path, fileName))
 		if err != nil {
-			fmt.Println(color.RedString("could not create configuration file. please do so manually (stage 1)."))
+			fmt.Println(color.RedString("could not create %v/%v. please do so manually (stage 1).", path, fileName))
 			os.Exit(1)
 		}
 
 		_, errWrite := file.Write(embedContent)
 
 		if errWrite != nil {
-			fmt.Println(color.RedString("could not create configuration file. please do so manually (stage 2)."))
+			fmt.Println(color.RedString("could not create %v/%v. please do so manually (stage 2).", path, fileName))
 		}
 
-		fmt.Println(color.New(color.FgGreen, color.Italic).Sprintf("configuration file could not be located; created an example configuration file at %v\n", filepath.Join(path, fileName)))
-
+		if fileName == "config.toml" {
+			fmt.Println(color.New(color.FgGreen, color.Italic).Sprintf("configuration file could not be located; created an example configuration file at %v\n", filepath.Join(path, fileName)))
+		}
 		defer file.Close()
 
 		return true

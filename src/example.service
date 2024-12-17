@@ -1,12 +1,11 @@
 [Unit]
-Description=My custom service
+Description=dynamic domain name server updater
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/my_custom_command
-Restart=on-failure
-User=my_user
-Group=my_group
+Type=simple
+StandardOutput=journal
+ExecStart=/home/@user/.config/ddnsu/run.sh
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
