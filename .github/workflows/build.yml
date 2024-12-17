@@ -22,10 +22,6 @@ jobs:
       - name: Build ddnsu binaries
         run: make
       - name: Upload binaries as GitHub Release
-        uses: xresloader/upload-to-github-release@v1
+        uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: "${{github.workspace}}/build/*"
-          draft: true
-          verbose: true
