@@ -25,5 +25,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "build/*"
-          token: ${{ secrets.GITHUB_TOKEN }},
           draft: true
