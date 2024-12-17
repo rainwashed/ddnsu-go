@@ -1,0 +1,12 @@
+[Unit]
+Description=My custom service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/my_custom_command
+Restart=on-failure
+User=my_user
+Group=my_group
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,23 @@
+[ddnsu]
+version = "0.0.1" # internal tracking
+use = "cloudflare" # cloudflare / vercel
+domain="example.com"
+ipProviders = [ # websites that provide the public ip address in the ip property
+    "https://api.ipify.org/?format=json",
+    "https://api.my-ip.io/v2/ip.json",
+    "https://api.myip.com",
+    "https://api.seeip.org/jsonip",
+    "https://ipwho.is"
+]
+rate = 60 # frequency to recheck domains (in minutes)
+
+[services.cloudflare]
+token = "" # cloudflare authorization token
+[services.vercel]
+token = "" # vercel authorization token
+
+[[ddnsu.record]]
+rtype = "A" # type of the record; can be A, Alias, CAA, CNAME, HTTPS, MX, SRV, TXT, NS
+comment = ""
+ttl = 1
+subdomain = "@" # subdomain (also called name) of the record
